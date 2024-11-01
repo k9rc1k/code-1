@@ -1,0 +1,37 @@
+import os
+import requests
+from bs4 import BeautifulSoup
+
+# Функция для скачивания изображения
+def download_image(image_url, save_path):
+    img_data = requests.get(image_url).content
+    with open(save_path, 'wb') as handler:
+        handler.write(img_data)
+
+# Запрос данных у пользователя
+avatar_url = input("Введите URL аватарки: ")
+price = input("Введите цену: ")
+pattern = input("Введите паттерн (например, цветовой код): ")
+
+# Создание папки для сохранения аватара
+if not os.path.exists('images'):
+    os.makedirs('images')
+
+# Скачивание аватарки
+avatar_filename = os.path.join('images', 'avatar.jpg')
+download_image(avatar_url, avatar_filename)
+
+# Сохранение данных в файл
+data = {
+    "avatar": avatar_filename,
+    "price": price,
+    "pattern": pattern
+}
+
+with open('image_data.txt', 'w') as f:
+    f.write(f"Avatar: {data['avatar']}\n")
+    f.write(f"Price: {data['price']}\n")
+    f.write(f"Pattern: {data['pattern']}\n")
+
+
+print("Данные успешно сохранены.")
